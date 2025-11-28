@@ -20,6 +20,7 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#166534" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4033311126187552" crossOrigin="anonymous"></script>
       </head>
       <body className={`${inter.className} antialiased`}>
         <Providers>{children}</Providers>
