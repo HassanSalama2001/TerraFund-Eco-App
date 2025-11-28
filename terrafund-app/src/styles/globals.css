@@ -1,0 +1,96 @@
+:root {
+  /* Earth Tones Palette */
+  --color-earth-900: #2c1810;
+  --color-earth-800: #4a2c20;
+  --color-earth-700: #6d4c41;
+  --color-earth-600: #8d6e63;
+  
+  /* Vibrant Greens */
+  --color-nature-900: #1b5e20;
+  --color-nature-700: #388e3c;
+  --color-nature-500: #4caf50;
+  --color-nature-400: #66bb6a;
+  --color-nature-300: #81c784;
+  --color-nature-100: #c8e6c9;
+
+  /* Sky & Water */
+  --color-sky-500: #03a9f4;
+  --color-sky-100: #b3e5fc;
+
+  /* Neutrals */
+  --color-background: #fdfbf7; /* Warm off-white */
+  --color-surface: #ffffff;
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #555555;
+  --color-border: #e0e0e0;
+
+  /* UI Accents */
+  --color-primary: var(--color-nature-700);
+  --color-primary-hover: var(--color-nature-900);
+  --color-secondary: var(--color-earth-700);
+  --color-accent: #ff9800; /* Sun/Gold */
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  /* Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Utilities */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.h-screen {
+  min-height: 100vh;
+}

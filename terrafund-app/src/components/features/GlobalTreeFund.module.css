@@ -1,0 +1,164 @@
+.container {
+    background: linear-gradient(135deg, var(--color-nature-100), var(--color-sky-100));
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    border: 2px solid var(--color-nature-300);
+    box-shadow: var(--shadow-lg);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-earth-900);
+    margin: 0;
+}
+
+.badge {
+    background-color: var(--color-nature-700);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.currentTree {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.treeLabel {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+}
+
+.treeNumber {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--color-nature-900);
+}
+
+.progressContainer {
+    margin-bottom: var(--spacing-lg);
+}
+
+.progressBar {
+    width: 100%;
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    border: 2px solid var(--color-nature-500);
+    position: relative;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-nature-500), var(--color-nature-700));
+    border-radius: var(--radius-full);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progressText {
+    text-align: center;
+    margin-top: var(--spacing-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-nature-900);
+}
+
+.amounts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.amountItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.amountLabel {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.amountValue {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-nature-900);
+}
+
+.divider {
+    font-size: 1.5rem;
+    color: var(--color-text-secondary);
+    font-weight: 300;
+}
+
+.remaining {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.remainingIcon {
+    font-size: 1.25rem;
+}
+
+.remainingText {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-earth-800);
+}
+
+.callToAction {
+    text-align: center;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.ctaText {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-lg);
+    }
+
+    .title {
+        font-size: 1.25rem;
+    }
+
+    .treeNumber {
+        font-size: 1.5rem;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+}

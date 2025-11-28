@@ -1,0 +1,195 @@
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-md);
+  text-align: center;
+  background: linear-gradient(180deg, var(--color-background) 0%, var(--color-nature-100) 100%);
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--color-earth-900);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.2;
+}
+
+.highlight {
+  color: var(--color-nature-700);
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin-bottom: var(--spacing-xl);
+}
+
+.ctaGroup {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.features {
+  padding: var(--spacing-2xl) var(--spacing-md);
+  background-color: var(--color-surface);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-earth-800);
+  margin-bottom: var(--spacing-sm);
+}
+
+.cardText {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.cardIcon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.liveStats {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-2xl);
+  flex-wrap: wrap;
+}
+
+.statBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+}
+
+.statNumber {
+  font-size: 1.5rem;
+}
+
+.statText {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-earth-900);
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-2xl);
+  color: var(--color-earth-900);
+}
+
+.whyDifferent {
+  padding: var(--spacing-3xl) var(--spacing-md);
+  background-color: var(--color-background);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.differenceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.differenceCard {
+  padding: var(--spacing-lg);
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.differenceCard h4 {
+  font-size: 1.125rem;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-earth-900);
+}
+
+.differenceCard p {
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.cta {
+  padding: var(--spacing-3xl) var(--spacing-md);
+  text-align: center;
+  background: linear-gradient(135deg, var(--color-nature-500), var(--color-nature-700));
+  color: white;
+}
+
+.ctaTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+}
+
+.ctaSubtitle {
+  font-size: 1.125rem;
+  margin-bottom: var(--spacing-xl);
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .liveStats {
+    gap: var(--spacing-sm);
+  }
+
+  .statBadge {
+    padding: var(--spacing-xs) var(--spacing-md);
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .ctaTitle {
+    font-size: 1.5rem;
+  }
+}
