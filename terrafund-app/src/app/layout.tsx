@@ -6,8 +6,8 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "TerraFund Eco App",
-  description: "Watch ads, plant trees, save the planet.",
+  title: "Plant With Ads | Watch Ads, Plant Real Trees",
+  description: "Join the community where watching ads plants real trees. 100% transparent, community-powered reforestation.",
 };
 
 export default function RootLayout({
