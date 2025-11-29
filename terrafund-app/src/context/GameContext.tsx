@@ -33,7 +33,7 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [state, setState] = useState<GameState>({
-        // Global Tree Fund (Simulated)
+        // Global Tree Fund (Real - No Simulation)
         currentAmount: 0,
         targetAmount: 0.50,
         currentTreeNumber: 1,
@@ -54,16 +54,20 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // 1. Load User State from Local Storage on Mount
     useEffect(() => {
-        const savedState = localStorage.getItem('plantWithAdsState');
+        const savedState = localStorage.getItem('plantWithAdsState_v2');
         if (savedState) {
             try {
                 const parsed = JSON.parse(savedState);
-                // Only restore user-specific stats, not global ones
                 setState(prev => ({
                     ...prev,
+                    // Restore User Stats
                     totalAdsWatched: parsed.totalAdsWatched || 0,
                     totalContribution: parsed.totalContribution || 0,
                     treesContributedTo: parsed.treesContributedTo || 0,
+                    // Restore "Global" Stats (Local Cumulative)
+                    currentAmount: parsed.currentAmount || 0,
+                    totalTreesPlanted: parsed.totalTreesPlanted || 0,
+                    currentTreeNumber: parsed.currentTreeNumber || 1,
                     isInitialized: true
                 }));
             } catch (e) {
@@ -79,54 +83,25 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         if (!state.isInitialized) return;
 
-        const userStateToSave = {
+        const stateToSave = {
+            // User Stats
             totalAdsWatched: state.totalAdsWatched,
             totalContribution: state.totalContribution,
-            treesContributedTo: state.treesContributedTo
+            treesContributedTo: state.treesContributedTo,
+            // "Global" Stats (persisted locally for now)
+            currentAmount: state.currentAmount,
+            totalTreesPlanted: state.totalTreesPlanted,
+            currentTreeNumber: state.currentTreeNumber
         };
-        localStorage.setItem('plantWithAdsState', JSON.stringify(userStateToSave));
-    }, [state.totalAdsWatched, state.totalContribution, state.treesContributedTo, state.isInitialized]);
+        localStorage.setItem('plantWithAdsState_v2', JSON.stringify(stateToSave));
+    }, [state, state.isInitialized]);
 
-    // 3. Simulate Global Tree Fund (Deterministic Growth)
+    // 3. Real Global Fund (No Simulation)
+    // Note: In a real production app, this would fetch from a backend API.
+    // For this MVP without a backend, "Global" is effectively "Local Cumulative".
+    // We removed the time-based simulation to ensure 100% transparency.
     useEffect(() => {
-        // Simulation Start: Nov 1, 2025
-        const startDate = new Date('2025-11-01T00:00:00Z').getTime();
-        const now = Date.now();
-        const minutesElapsed = (now - startDate) / (1000 * 60);
-
-        // Growth Rate: 1 tree every 10 minutes (approx)
-        // $0.50 per tree -> $0.05 per minute
-        const growthRatePerMinute = 0.05;
-        const totalGlobalRevenue = minutesElapsed * growthRatePerMinute;
-
-        const treeCost = 0.50;
-        const totalTrees = Math.floor(totalGlobalRevenue / treeCost);
-        const currentPool = totalGlobalRevenue % treeCost;
-
-        setState(prev => ({
-            ...prev,
-            totalTreesPlanted: 1240 + totalTrees, // Base of 1240 trees
-            currentTreeNumber: 1241 + totalTrees,
-            currentAmount: currentPool
-        }));
-
-        // Update every minute to keep it "live"
-        const interval = setInterval(() => {
-            setState(prev => {
-                const newPool = prev.currentAmount + (growthRatePerMinute / 60); // Add per second roughly
-                if (newPool >= treeCost) {
-                    return {
-                        ...prev,
-                        totalTreesPlanted: prev.totalTreesPlanted + 1,
-                        currentTreeNumber: prev.currentTreeNumber + 1,
-                        currentAmount: newPool - treeCost
-                    };
-                }
-                return { ...prev, currentAmount: newPool };
-            });
-        }, 1000); // Update every second for smooth UI
-
-        return () => clearInterval(interval);
+        // No-op: We rely solely on user actions to update the fund.
     }, []);
 
     // Fetch pricing on mount
