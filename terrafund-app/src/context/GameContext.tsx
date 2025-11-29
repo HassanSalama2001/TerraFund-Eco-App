@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { PricingSource } from '../lib/pricing-sources';
 import { User } from 'firebase/auth';
+import { Badge } from '../lib/badges';
 
 interface GlobalTreeFund {
     currentAdsGlobal: number;
@@ -15,17 +16,18 @@ interface GlobalTreeFund {
 interface UserStats {
     totalAdsWatched: number;
     treesContributedTo: number;
+    unlockedBadges: string[];
 }
 
 interface GameState extends GlobalTreeFund, UserStats {
     pricingSources: PricingSource[];
     lastPriceUpdate: string | null;
     isInitialized: boolean;
-    user: User | null; // Auth User
+    user: User | null;
 }
 
 interface GameContextType extends GameState {
-    watchAd: () => { treePlanted: boolean; treeNumber?: number };
+    watchAd: () => Promise<{ treePlanted: boolean; treeNumber?: number; newBadges?: Badge[] }>;
     refreshPricing: () => Promise<void>;
     signIn: () => Promise<void>;
     signOut: () => Promise<void>;
@@ -40,11 +42,12 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         adsRequiredPerTree: 250,
         currentTreeNumber: 1,
         totalTreesPlanted: 0,
-        lastUpdated: new Date().toISOString(),
+        lastUpdated: "2024-01-01T00:00:00.000Z",
 
         // User Stats
         totalAdsWatched: 0,
         treesContributedTo: 0,
+        unlockedBadges: [],
 
         // Pricing
         pricingSources: [],
@@ -53,7 +56,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         user: null,
     });
 
-    // 1. Load User State from Local Storage on Mount (Guest Mode)
+    // 1. Load User State from Local Storage (Guest Mode)
     useEffect(() => {
         const savedState = localStorage.getItem('plantWithAdsState_v3');
         if (savedState) {
@@ -63,6 +66,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     ...prev,
                     totalAdsWatched: parsed.totalAdsWatched || 0,
                     treesContributedTo: parsed.treesContributedTo || 0,
+                    unlockedBadges: parsed.unlockedBadges || [],
                     isInitialized: true
                 }));
             } catch (e) {
@@ -76,14 +80,15 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // 2. Save User State to Local Storage (Guest Mode Only)
     useEffect(() => {
-        if (!state.isInitialized || state.user) return; // Don't save to local if logged in
+        if (!state.isInitialized || state.user) return;
 
         const stateToSave = {
             totalAdsWatched: state.totalAdsWatched,
             treesContributedTo: state.treesContributedTo,
+            unlockedBadges: state.unlockedBadges
         };
         localStorage.setItem('plantWithAdsState_v3', JSON.stringify(stateToSave));
-    }, [state.totalAdsWatched, state.treesContributedTo, state.isInitialized, state.user]);
+    }, [state.totalAdsWatched, state.treesContributedTo, state.unlockedBadges, state.isInitialized, state.user]);
 
     // 3. Subscribe to Auth State
     useEffect(() => {
@@ -100,20 +105,24 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
                                 totalAdsWatched: guestAds,
                                 treesContributedTo: guestTrees
                             });
-                            // Clear local storage after merge to avoid double counting if they logout
                             localStorage.removeItem('plantWithAdsState_v3');
                         }
 
+                        // Load user badges
+                        import('../services/achievementService').then(async ({ AchievementService }) => {
+                            const badges = await AchievementService.getUserBadges(user);
+                            setState(prev => ({ ...prev, user: user, unlockedBadges: badges }));
+                        });
+
                         setState(prev => ({ ...prev, user: user }));
                     } else {
-                        // User Signed Out
-                        setState(prev => ({ ...prev, user: null }));
+                        setState(prev => ({ ...prev, user: null, unlockedBadges: [] }));
                     }
                 });
                 return () => unsubscribe();
             });
         }
-    }, [state.totalAdsWatched]); // Depend on stats to capture them for merge
+    }, [state.totalAdsWatched]);
 
     // 4. Subscribe to Real Global Fund
     useEffect(() => {
@@ -163,42 +172,71 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const signOut = async () => {
         const { AuthService } = await import('../services/authService');
         await AuthService.signOut();
-        // Reset to empty guest state on logout
         setState(prev => ({
             ...prev,
             user: null,
             totalAdsWatched: 0,
-            treesContributedTo: 0
+            treesContributedTo: 0,
+            unlockedBadges: []
         }));
     };
 
-    const watchAd = () => {
+    const watchAd = async () => {
         let treePlanted = false;
         let plantedTreeNumber: number | undefined;
+        let newBadges: Badge[] = [];
 
-        setState(prev => {
-            const newAdsWatched = prev.totalAdsWatched + 1;
-            const potentialNewAds = prev.currentAdsGlobal + 1;
+        // Calculate new stats first
+        const newAdsWatched = state.totalAdsWatched + 1;
+        const potentialNewAds = state.currentAdsGlobal + 1;
+        let newTreesContributed = state.treesContributedTo;
 
-            if (potentialNewAds >= prev.adsRequiredPerTree) {
-                treePlanted = true;
-                plantedTreeNumber = prev.currentTreeNumber;
-            }
+        if (potentialNewAds >= state.adsRequiredPerTree) {
+            treePlanted = true;
+            plantedTreeNumber = state.currentTreeNumber;
+            newTreesContributed += 1;
+        }
 
-            return {
+        // Check for achievements
+        const { AchievementService } = await import('../services/achievementService');
+        const unlocked = AchievementService.checkBadges(
+            { totalAdsWatched: newAdsWatched, treesContributedTo: newTreesContributed },
+            state.unlockedBadges
+        );
+
+        if (unlocked.length > 0) {
+            newBadges = unlocked;
+            const newBadgeIds = unlocked.map(b => b.id);
+
+            // Update local state
+            setState(prev => ({
                 ...prev,
-                totalAdsWatched: newAdsWatched,
-                treesContributedTo: treePlanted ? prev.treesContributedTo + 1 : prev.treesContributedTo
-            };
-        });
+                unlockedBadges: [...prev.unlockedBadges, ...newBadgeIds]
+            }));
 
+            // Update Firestore if logged in
+            if (state.user) {
+                unlocked.forEach(badge => {
+                    AchievementService.unlockBadge(state.user!, badge.id);
+                });
+            }
+        }
+
+        // Update main state
+        setState(prev => ({
+            ...prev,
+            totalAdsWatched: newAdsWatched,
+            treesContributedTo: newTreesContributed
+        }));
+
+        // Update Backend
         if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
             import('../services/fundService').then(({ FundService }) => {
                 FundService.addToFund(1);
             });
         }
 
-        return { treePlanted, treeNumber: plantedTreeNumber };
+        return { treePlanted, treeNumber: plantedTreeNumber, newBadges };
     };
 
     return (

@@ -23,9 +23,9 @@ export const AdSimulation = () => {
         setIsModalOpen(true);
     };
 
-    const handleAdComplete = () => {
+    const handleAdComplete = async () => {
         // Reward user (1 Ad Contribution)
-        const result = watchAd();
+        const result = await watchAd();
         setIsModalOpen(false);
 
         // Show celebration if tree was planted
@@ -39,6 +39,22 @@ export const AdSimulation = () => {
                 description: `The community just planted Tree #${result.treeNumber}! You were part of it! A real tree will be planted with this funding.`,
                 icon: '🎉',
             });
+        }
+
+        // Show badge notification (if any)
+        if (result.newBadges && result.newBadges.length > 0) {
+            const badge = result.newBadges[0]; // Show the first one if multiple
+
+            const delay = result.treePlanted ? 3000 : 500;
+
+            setTimeout(() => {
+                setAchievement({
+                    show: true,
+                    title: `Badge Unlocked: ${badge.name}! 🏆`,
+                    description: badge.description,
+                    icon: badge.icon,
+                });
+            }, delay);
         }
     };
 

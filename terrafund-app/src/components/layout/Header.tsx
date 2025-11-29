@@ -1,7 +1,5 @@
 'use client';
 
-'use client';
-
 import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '../ui/Button';
@@ -38,12 +36,14 @@ export const Header = () => {
 
                         {user ? (
                             <div className={styles.userProfile}>
-                                <img
-                                    src={user.photoURL || '/default-avatar.png'}
-                                    alt="Profile"
-                                    className={styles.avatar}
-                                    title={`Signed in as ${user.displayName}`}
-                                />
+                                <Link href="/profile">
+                                    <img
+                                        src={user.photoURL || '/default-avatar.png'}
+                                        alt="Profile"
+                                        className={styles.avatar}
+                                        title={`Signed in as ${user.displayName}`}
+                                    />
+                                </Link>
                                 <Button size="sm" variant="outline" onClick={() => signOut()}>
                                     Sign Out
                                 </Button>
