@@ -1,0 +1,119 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-background);
+}
+
+.main {
+    flex: 1;
+    padding: var(--spacing-xl) 0;
+}
+
+.header {
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-earth-900);
+    margin-bottom: var(--spacing-md);
+}
+
+.section {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+}
+
+.cardTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-earth-900);
+}
+
+.grid {
+    display: grid;
+    gap: var(--spacing-xl);
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.howItWorksGrid {
+    display: grid;
+    gap: var(--spacing-lg);
+}
+
+.step {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+    padding: var(--spacing-md);
+    background: var(--color-nature-50);
+    border-radius: var(--radius-md);
+    transition: transform 0.2s;
+}
+
+.step:hover {
+    transform: translateX(4px);
+}
+
+.stepIcon {
+    font-size: 1.5rem;
+    background: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: var(--shadow-sm);
+}
+
+.stepContent h4 {
+    font-weight: 600;
+    color: var(--color-earth-900);
+    margin-bottom: 4px;
+}
+
+.stepContent p {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+}
+
+.didYouKnow {
+    background: linear-gradient(135deg, var(--color-nature-50), var(--color-water-50));
+    border: 2px solid var(--color-nature-200);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+}
+
+.didYouKnowTitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-earth-900);
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.didYouKnowText {
+    font-size: 0.95rem;
+    color: var(--color-earth-800);
+    margin-bottom: var(--spacing-sm);
+}

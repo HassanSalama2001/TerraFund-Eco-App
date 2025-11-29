@@ -22,7 +22,9 @@ export default function Home() {
           <Link href="/dashboard">
             <Button size="lg">Join the Movement</Button>
           </Link>
-          <Button variant="outline" size="lg">How It Works</Button>
+          <Link href="#how-it-works">
+            <Button variant="outline" size="lg">How It Works</Button>
+          </Link>
         </div>
 
         {/* Live stats preview */}
@@ -42,8 +44,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className={styles.features}>
-        <h2 className={styles.sectionTitle}>How TerraFund Works</h2>
+      <section id="how-it-works" className={styles.features}>
+        <h2 className={styles.sectionTitle}>How Plant With Ads Works</h2>
         <div className={styles.grid}>
           <div className={styles.card}>
             <div className={styles.cardIcon}>📺</div>
@@ -78,7 +80,7 @@ export default function Home() {
 
       <section className={styles.whyDifferent}>
         <div className={styles.container}>
-          <h2 className={styles.sectionTitle}>Why TerraFund is Different</h2>
+          <h2 className={styles.sectionTitle}>Why Plant With Ads is Different</h2>
           <div className={styles.differenceGrid}>
             <div className={styles.differenceCard}>
               <h4>💰 Real Money</h4>

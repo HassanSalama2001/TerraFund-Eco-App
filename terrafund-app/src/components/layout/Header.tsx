@@ -13,7 +13,9 @@ export const Header = () => {
                     <Link href="/dashboard" className={styles.link}>Dashboard</Link>
                     <Link href="/blog" className={styles.link}>Blog</Link>
                     <Link href="/about" className={styles.link}>About</Link>
-                    <Button size="sm" variant="primary">Start Planting</Button>
+                    <Link href="/dashboard">
+                        <Button size="sm" variant="primary">Start Planting</Button>
+                    </Link>
                 </nav>
             </div>
         </header>

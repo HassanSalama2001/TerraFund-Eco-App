@@ -52,7 +52,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Load state from local storage on mount
     useEffect(() => {
-        const savedState = localStorage.getItem('terraFundState');
+        const savedState = localStorage.getItem('plantWithAdsState');
         if (savedState) {
             const parsed = JSON.parse(savedState);
             setState(prev => ({ ...prev, ...parsed }));
@@ -61,7 +61,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Save state to local storage on change
     useEffect(() => {
-        localStorage.setItem('terraFundState', JSON.stringify(state));
+        localStorage.setItem('plantWithAdsState', JSON.stringify(state));
     }, [state]);
 
     // Fetch pricing on mount

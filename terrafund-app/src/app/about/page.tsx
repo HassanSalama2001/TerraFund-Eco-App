@@ -2,6 +2,7 @@ import { Header } from '../../components/layout/Header';
 import { Footer } from '../../components/layout/Footer';
 import { Button } from '../../components/ui/Button';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './page.module.css';
 
 export default function About() {
@@ -70,14 +71,41 @@ export default function About() {
                     </p>
                     <div className={styles.partnerGrid}>
                         <div className={styles.partnerCard}>
+                            <div className={styles.partnerLogo}>
+                                <Image
+                                    src="/images/partners/one-tree-planted.png"
+                                    alt="One Tree Planted"
+                                    width={100}
+                                    height={100}
+                                    style={{ objectFit: 'contain' }}
+                                />
+                            </div>
                             <h4>One Tree Planted</h4>
                             <p>Global reforestation across 43 countries.</p>
                         </div>
                         <div className={styles.partnerCard}>
+                            <div className={styles.partnerLogo}>
+                                <Image
+                                    src="/images/partners/team-trees.png"
+                                    alt="Team Trees"
+                                    width={100}
+                                    height={100}
+                                    style={{ objectFit: 'contain' }}
+                                />
+                            </div>
                             <h4>Team Trees</h4>
                             <p>Arbor Day Foundation partnership.</p>
                         </div>
                         <div className={styles.partnerCard}>
+                            <div className={styles.partnerLogo}>
+                                <Image
+                                    src="/images/partners/eden-reforestation.png"
+                                    alt="Eden Reforestation"
+                                    width={100}
+                                    height={100}
+                                    style={{ objectFit: 'contain' }}
+                                />
+                            </div>
                             <h4>Eden Reforestation</h4>
                             <p>Restoring mangroves and forests.</p>
                         </div>
