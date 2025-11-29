@@ -33,7 +33,7 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [state, setState] = useState<GameState>({
-        // Global Tree Fund (Real - No Simulation)
+        // Global Tree Fund (Real Backend)
         currentAmount: 0,
         targetAmount: 0.50,
         currentTreeNumber: 1,
@@ -64,10 +64,6 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     totalAdsWatched: parsed.totalAdsWatched || 0,
                     totalContribution: parsed.totalContribution || 0,
                     treesContributedTo: parsed.treesContributedTo || 0,
-                    // Restore "Global" Stats (Local Cumulative)
-                    currentAmount: parsed.currentAmount || 0,
-                    totalTreesPlanted: parsed.totalTreesPlanted || 0,
-                    currentTreeNumber: parsed.currentTreeNumber || 1,
                     isInitialized: true
                 }));
             } catch (e) {
@@ -84,24 +80,31 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (!state.isInitialized) return;
 
         const stateToSave = {
-            // User Stats
+            // User Stats Only (Global comes from Firebase)
             totalAdsWatched: state.totalAdsWatched,
             totalContribution: state.totalContribution,
             treesContributedTo: state.treesContributedTo,
-            // "Global" Stats (persisted locally for now)
-            currentAmount: state.currentAmount,
-            totalTreesPlanted: state.totalTreesPlanted,
-            currentTreeNumber: state.currentTreeNumber
         };
         localStorage.setItem('plantWithAdsState_v2', JSON.stringify(stateToSave));
-    }, [state, state.isInitialized]);
+    }, [state.totalAdsWatched, state.totalContribution, state.treesContributedTo, state.isInitialized]);
 
-    // 3. Real Global Fund (No Simulation)
-    // Note: In a real production app, this would fetch from a backend API.
-    // For this MVP without a backend, "Global" is effectively "Local Cumulative".
-    // We removed the time-based simulation to ensure 100% transparency.
+    // 3. Subscribe to Real Global Fund (Firebase)
     useEffect(() => {
-        // No-op: We rely solely on user actions to update the fund.
+        // Only connect if API key is present (to avoid errors during setup)
+        if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+            import('../services/fundService').then(({ FundService }) => {
+                const unsubscribe = FundService.subscribeToFund((data) => {
+                    setState(prev => ({
+                        ...prev,
+                        currentAmount: data.currentAmount,
+                        totalTreesPlanted: data.totalTreesPlanted,
+                        currentTreeNumber: data.currentTreeNumber,
+                        lastUpdated: data.lastUpdated
+                    }));
+                });
+                return () => unsubscribe();
+            }).catch(err => console.error("Firebase not configured yet", err));
+        }
     }, []);
 
     // Fetch pricing on mount
@@ -133,36 +136,33 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         let treePlanted = false;
         let plantedTreeNumber: number | undefined;
 
+        // 1. Update Local User Stats
         setState(prev => {
-            const newAmount = prev.currentAmount + revenue;
             const newTotalContribution = prev.totalContribution + revenue;
             const newAdsWatched = prev.totalAdsWatched + 1;
 
-            // Check if we reached the target
-            if (newAmount >= prev.targetAmount) {
+            // Check if this specific contribution "tipped over" the tree (optimistic UI)
+            // In reality, the backend decides, but for UI feedback we can guess
+            const potentialNewAmount = prev.currentAmount + revenue;
+            if (potentialNewAmount >= prev.targetAmount) {
                 treePlanted = true;
                 plantedTreeNumber = prev.currentTreeNumber;
-
-                return {
-                    ...prev,
-                    currentAmount: newAmount - prev.targetAmount, // Carry over excess
-                    currentTreeNumber: prev.currentTreeNumber + 1,
-                    totalTreesPlanted: prev.totalTreesPlanted + 1,
-                    totalAdsWatched: newAdsWatched,
-                    totalContribution: newTotalContribution,
-                    treesContributedTo: prev.treesContributedTo + 1,
-                    lastUpdated: new Date().toISOString(),
-                };
             }
 
             return {
                 ...prev,
-                currentAmount: newAmount,
                 totalAdsWatched: newAdsWatched,
                 totalContribution: newTotalContribution,
-                lastUpdated: new Date().toISOString(),
+                treesContributedTo: treePlanted ? prev.treesContributedTo + 1 : prev.treesContributedTo
             };
         });
+
+        // 2. Update Real Backend
+        if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+            import('../services/fundService').then(({ FundService }) => {
+                FundService.addToFund(revenue);
+            });
+        }
 
         return { treePlanted, treeNumber: plantedTreeNumber };
     };
