@@ -8,7 +8,7 @@ export interface GlobalFundData {
     lastUpdated: string;
 }
 
-const GLOBAL_DOC_REF = doc(db, 'global', 'fund');
+const GLOBAL_DOC_REF = doc(db, 'global', 'fund_v2');
 
 export const FundService = {
     // Subscribe to real-time updates
@@ -20,8 +20,8 @@ export const FundService = {
                 // Initialize if not exists
                 const initialData: GlobalFundData = {
                     currentAmount: 0,
-                    totalTreesPlanted: 1240, // Starting base
-                    currentTreeNumber: 1241,
+                    totalTreesPlanted: 0, // Start from 0
+                    currentTreeNumber: 1, // Start from Tree #1
                     lastUpdated: new Date().toISOString()
                 };
                 setDoc(GLOBAL_DOC_REF, initialData);
