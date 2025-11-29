@@ -2,36 +2,40 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { PricingSource } from '../lib/pricing-sources';
+import { User } from 'firebase/auth';
 
 interface GlobalTreeFund {
-    currentAdsGlobal: number;   // Total ads watched in current batch
-    adsRequiredPerTree: number; // Target ads to plant one tree
-    currentTreeNumber: number;  // Tree #127
-    totalTreesPlanted: number;  // 126 trees purchased so far
+    currentAdsGlobal: number;
+    adsRequiredPerTree: number;
+    currentTreeNumber: number;
+    totalTreesPlanted: number;
     lastUpdated: string;
 }
 
 interface UserStats {
     totalAdsWatched: number;
-    treesContributedTo: number;    // Number of trees user helped plant
+    treesContributedTo: number;
 }
 
 interface GameState extends GlobalTreeFund, UserStats {
     pricingSources: PricingSource[];
     lastPriceUpdate: string | null;
     isInitialized: boolean;
+    user: User | null; // Auth User
 }
 
 interface GameContextType extends GameState {
     watchAd: () => { treePlanted: boolean; treeNumber?: number };
     refreshPricing: () => Promise<void>;
+    signIn: () => Promise<void>;
+    signOut: () => Promise<void>;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [state, setState] = useState<GameState>({
-        // Global Tree Fund (Real Backend)
+        // Global Tree Fund
         currentAdsGlobal: 0,
         adsRequiredPerTree: 250,
         currentTreeNumber: 1,
@@ -42,13 +46,14 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         totalAdsWatched: 0,
         treesContributedTo: 0,
 
-        // Pricing (kept for reference/transparency if needed later)
+        // Pricing
         pricingSources: [],
         lastPriceUpdate: null,
         isInitialized: false,
+        user: null,
     });
 
-    // 1. Load User State from Local Storage on Mount
+    // 1. Load User State from Local Storage on Mount (Guest Mode)
     useEffect(() => {
         const savedState = localStorage.getItem('plantWithAdsState_v3');
         if (savedState) {
@@ -56,7 +61,6 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const parsed = JSON.parse(savedState);
                 setState(prev => ({
                     ...prev,
-                    // Restore User Stats
                     totalAdsWatched: parsed.totalAdsWatched || 0,
                     treesContributedTo: parsed.treesContributedTo || 0,
                     isInitialized: true
@@ -70,21 +74,49 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }, []);
 
-    // 2. Save User State to Local Storage on Change
+    // 2. Save User State to Local Storage (Guest Mode Only)
     useEffect(() => {
-        if (!state.isInitialized) return;
+        if (!state.isInitialized || state.user) return; // Don't save to local if logged in
 
         const stateToSave = {
-            // User Stats Only
             totalAdsWatched: state.totalAdsWatched,
             treesContributedTo: state.treesContributedTo,
         };
         localStorage.setItem('plantWithAdsState_v3', JSON.stringify(stateToSave));
-    }, [state.totalAdsWatched, state.treesContributedTo, state.isInitialized]);
+    }, [state.totalAdsWatched, state.treesContributedTo, state.isInitialized, state.user]);
 
-    // 3. Subscribe to Real Global Fund (Firebase)
+    // 3. Subscribe to Auth State
     useEffect(() => {
-        // Only connect if API key is present (to avoid errors during setup)
+        if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+            import('../services/authService').then(({ AuthService }) => {
+                const unsubscribe = AuthService.onAuthStateChanged(async (user) => {
+                    if (user) {
+                        // User Signed In: Merge Guest Stats
+                        const guestAds = state.totalAdsWatched;
+                        const guestTrees = state.treesContributedTo;
+
+                        if (guestAds > 0) {
+                            await AuthService.mergeGuestStats(user, {
+                                totalAdsWatched: guestAds,
+                                treesContributedTo: guestTrees
+                            });
+                            // Clear local storage after merge to avoid double counting if they logout
+                            localStorage.removeItem('plantWithAdsState_v3');
+                        }
+
+                        setState(prev => ({ ...prev, user: user }));
+                    } else {
+                        // User Signed Out
+                        setState(prev => ({ ...prev, user: null }));
+                    }
+                });
+                return () => unsubscribe();
+            });
+        }
+    }, [state.totalAdsWatched]); // Depend on stats to capture them for merge
+
+    // 4. Subscribe to Real Global Fund
+    useEffect(() => {
         if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
             import('../services/fundService').then(({ FundService }) => {
                 const unsubscribe = FundService.subscribeToFund((data) => {
@@ -102,10 +134,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }, []);
 
-    // Fetch pricing on mount (optional now, but good to keep for transparency)
-    useEffect(() => {
-        refreshPricing();
-    }, []);
+    // Fetch pricing
+    useEffect(() => { refreshPricing(); }, []);
 
     const refreshPricing = async () => {
         try {
@@ -125,16 +155,31 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
+    const signIn = async () => {
+        const { AuthService } = await import('../services/authService');
+        await AuthService.signInWithGoogle();
+    };
+
+    const signOut = async () => {
+        const { AuthService } = await import('../services/authService');
+        await AuthService.signOut();
+        // Reset to empty guest state on logout
+        setState(prev => ({
+            ...prev,
+            user: null,
+            totalAdsWatched: 0,
+            treesContributedTo: 0
+        }));
+    };
+
     const watchAd = () => {
         let treePlanted = false;
         let plantedTreeNumber: number | undefined;
 
-        // 1. Update Local User Stats
         setState(prev => {
             const newAdsWatched = prev.totalAdsWatched + 1;
-
-            // Optimistic UI Check
             const potentialNewAds = prev.currentAdsGlobal + 1;
+
             if (potentialNewAds >= prev.adsRequiredPerTree) {
                 treePlanted = true;
                 plantedTreeNumber = prev.currentTreeNumber;
@@ -147,10 +192,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             };
         });
 
-        // 2. Update Real Backend
         if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
             import('../services/fundService').then(({ FundService }) => {
-                FundService.addToFund(1); // Add 1 ad
+                FundService.addToFund(1);
             });
         }
 
@@ -158,7 +202,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <GameContext.Provider value={{ ...state, watchAd, refreshPricing }}>
+        <GameContext.Provider value={{ ...state, watchAd, refreshPricing, signIn, signOut }}>
             {children}
         </GameContext.Provider>
     );

@@ -42,6 +42,20 @@
     color: var(--color-nature-700);
 }
 
+.userProfile {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-primary);
+}
+
 /* Mobile Menu Button */
 .mobileMenuBtn {
     display: none;
@@ -57,7 +71,6 @@
 .mobileNav {
     position: fixed;
     top: 70px;
-    /* Below header */
     left: 0;
     width: 100%;
     height: calc(100vh - 70px);

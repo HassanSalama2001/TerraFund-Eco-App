@@ -1,23 +1,21 @@
 .container {
-    background-color: white;
+    background: white;
     border-radius: var(--radius-lg);
     padding: var(--spacing-lg);
-    border: 1px solid var(--color-border);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
 }
 
 .title {
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--color-earth-900);
-    margin: 0 0 var(--spacing-lg) 0;
+    margin-bottom: var(--spacing-lg);
 }
 
 .stats {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
 }
 
 .statItem {
@@ -25,12 +23,20 @@
     align-items: center;
     gap: var(--spacing-md);
     padding: var(--spacing-md);
-    background-color: var(--color-background);
+    background: var(--color-surface);
     border-radius: var(--radius-md);
 }
 
 .statIcon {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    background: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: var(--shadow-sm);
 }
 
 .statContent {
@@ -41,25 +47,32 @@
 .statValue {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--color-nature-900);
-    line-height: 1.2;
+    color: var(--color-earth-900);
 }
 
 .statLabel {
     font-size: 0.875rem;
-    color: var(--color-text-secondary);
+    color: var(--color-text-light);
 }
 
 .encouragement {
-    padding: var(--spacing-md);
-    background: linear-gradient(135deg, var(--color-nature-100), var(--color-sky-100));
-    border-radius: var(--radius-md);
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border);
+    text-align: center;
+    font-weight: 500;
+    color: var(--color-primary);
+}
+
+.saveProgress {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border);
     text-align: center;
 }
 
-.encouragement p {
-    margin: 0;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: var(--color-earth-800);
+.saveText {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-sm);
 }
