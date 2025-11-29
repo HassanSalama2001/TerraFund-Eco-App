@@ -1,0 +1,82 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-background);
+}
+
+.main {
+    flex: 1;
+    padding: var(--spacing-3xl) var(--spacing-md);
+}
+
+.article {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+}
+
+.header {
+    background: var(--color-nature-50);
+    padding: var(--spacing-2xl);
+    text-align: center;
+    border-bottom: 1px solid var(--color-nature-100);
+}
+
+.meta {
+    font-size: 0.9rem;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--spacing-md);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.author {
+    margin-left: var(--spacing-md);
+    font-weight: 600;
+    color: var(--color-nature-700);
+}
+
+.title {
+    font-size: 2.5rem;
+    color: var(--color-earth-900);
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.2;
+}
+
+.icon {
+    font-size: 5rem;
+}
+
+.content {
+    padding: var(--spacing-3xl);
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--color-text-primary);
+}
+
+/* Styles for injected HTML content */
+.content h2 {
+    font-size: 1.75rem;
+    color: var(--color-earth-800);
+    margin-top: var(--spacing-2xl);
+    margin-bottom: var(--spacing-md);
+}
+
+.content p {
+    margin-bottom: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2rem;
+    }
+
+    .content {
+        padding: var(--spacing-xl);
+    }
+}
