@@ -31,7 +31,11 @@ export default function Contact() {
                                 <span className={styles.icon}>💬</span>
                                 <div>
                                     <strong>Social Media</strong>
-                                    <p>@PlantWithAds</p>
+                                    <p>
+                                        <a href="https://www.instagram.com/plantwithads/" target="_blank" rel="noopener noreferrer">Instagram</a>
+                                        {' • '}
+                                        <a href="https://www.tiktok.com/@plant.with.ads" target="_blank" rel="noopener noreferrer">TikTok</a>
+                                    </p>
                                 </div>
                             </div>
 

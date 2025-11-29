@@ -11,6 +11,8 @@ export const Footer = () => {
                     <Link href="/privacy" className={styles.link}>Privacy</Link>
                     <Link href="/terms" className={styles.link}>Terms</Link>
                     <Link href="/contact" className={styles.link}>Contact</Link>
+                    <Link href="https://www.instagram.com/plantwithads/" target="_blank" className={styles.socialLink}>Instagram</Link>
+                    <Link href="https://www.tiktok.com/@plant.with.ads" target="_blank" className={styles.socialLink}>TikTok</Link>
                 </div>
             </div>
         </footer>

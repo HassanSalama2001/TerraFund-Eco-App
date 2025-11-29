@@ -21,6 +21,7 @@ interface GameState extends GlobalTreeFund, UserStats {
     treeCostUSD: number;
     pricingSources: PricingSource[];
     lastPriceUpdate: string | null;
+    isInitialized: boolean;
 }
 
 interface GameContextType extends GameState {
@@ -32,7 +33,7 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [state, setState] = useState<GameState>({
-        // Global Tree Fund
+        // Global Tree Fund (Simulated)
         currentAmount: 0,
         targetAmount: 0.50,
         currentTreeNumber: 1,
@@ -48,21 +49,85 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         treeCostUSD: 0.50,
         pricingSources: [],
         lastPriceUpdate: null,
+        isInitialized: false,
     });
 
-    // Load state from local storage on mount
+    // 1. Load User State from Local Storage on Mount
     useEffect(() => {
         const savedState = localStorage.getItem('plantWithAdsState');
         if (savedState) {
-            const parsed = JSON.parse(savedState);
-            setState(prev => ({ ...prev, ...parsed }));
+            try {
+                const parsed = JSON.parse(savedState);
+                // Only restore user-specific stats, not global ones
+                setState(prev => ({
+                    ...prev,
+                    totalAdsWatched: parsed.totalAdsWatched || 0,
+                    totalContribution: parsed.totalContribution || 0,
+                    treesContributedTo: parsed.treesContributedTo || 0,
+                    isInitialized: true
+                }));
+            } catch (e) {
+                console.error("Failed to parse saved state", e);
+                setState(prev => ({ ...prev, isInitialized: true }));
+            }
+        } else {
+            setState(prev => ({ ...prev, isInitialized: true }));
         }
     }, []);
 
-    // Save state to local storage on change
+    // 2. Save User State to Local Storage on Change
     useEffect(() => {
-        localStorage.setItem('plantWithAdsState', JSON.stringify(state));
-    }, [state]);
+        if (!state.isInitialized) return;
+
+        const userStateToSave = {
+            totalAdsWatched: state.totalAdsWatched,
+            totalContribution: state.totalContribution,
+            treesContributedTo: state.treesContributedTo
+        };
+        localStorage.setItem('plantWithAdsState', JSON.stringify(userStateToSave));
+    }, [state.totalAdsWatched, state.totalContribution, state.treesContributedTo, state.isInitialized]);
+
+    // 3. Simulate Global Tree Fund (Deterministic Growth)
+    useEffect(() => {
+        // Simulation Start: Nov 1, 2025
+        const startDate = new Date('2025-11-01T00:00:00Z').getTime();
+        const now = Date.now();
+        const minutesElapsed = (now - startDate) / (1000 * 60);
+
+        // Growth Rate: 1 tree every 10 minutes (approx)
+        // $0.50 per tree -> $0.05 per minute
+        const growthRatePerMinute = 0.05;
+        const totalGlobalRevenue = minutesElapsed * growthRatePerMinute;
+
+        const treeCost = 0.50;
+        const totalTrees = Math.floor(totalGlobalRevenue / treeCost);
+        const currentPool = totalGlobalRevenue % treeCost;
+
+        setState(prev => ({
+            ...prev,
+            totalTreesPlanted: 1240 + totalTrees, // Base of 1240 trees
+            currentTreeNumber: 1241 + totalTrees,
+            currentAmount: currentPool
+        }));
+
+        // Update every minute to keep it "live"
+        const interval = setInterval(() => {
+            setState(prev => {
+                const newPool = prev.currentAmount + (growthRatePerMinute / 60); // Add per second roughly
+                if (newPool >= treeCost) {
+                    return {
+                        ...prev,
+                        totalTreesPlanted: prev.totalTreesPlanted + 1,
+                        currentTreeNumber: prev.currentTreeNumber + 1,
+                        currentAmount: newPool - treeCost
+                    };
+                }
+                return { ...prev, currentAmount: newPool };
+            });
+        }, 1000); // Update every second for smooth UI
+
+        return () => clearInterval(interval);
+    }, []);
 
     // Fetch pricing on mount
     useEffect(() => {
