@@ -51,28 +51,28 @@ export default function Home() {
             <div className={styles.cardIcon}>📺</div>
             <h3 className={styles.cardTitle}>1. Watch Ads</h3>
             <p className={styles.cardText}>
-              Every ad you watch generates real revenue that goes directly into our shared tree fund.
+              Every ad you watch adds to our shared tree fund. It's simple: watch ads, plant trees.
             </p>
           </div>
           <div className={styles.card}>
             <div className={styles.cardIcon}>🌍</div>
             <h3 className={styles.cardTitle}>2. Community Fund Grows</h3>
             <p className={styles.cardText}>
-              All users contribute together. Watch the fund grow in real-time as people watch ads worldwide.
+              All users contribute together. Watch the global ad counter grow in real-time.
             </p>
           </div>
           <div className={styles.card}>
             <div className={styles.cardIcon}>🌳</div>
             <h3 className={styles.cardTitle}>3. Trees Get Planted</h3>
             <p className={styles.cardText}>
-              When we hit $0.50, we buy a real tree from verified organizations. Then the next tree starts!
+              When we reach the ad goal (e.g. 250 ads), we plant a real tree! Then the next tree starts!
             </p>
           </div>
           <div className={styles.card}>
             <div className={styles.cardIcon}>📊</div>
             <h3 className={styles.cardTitle}>4. Track Your Impact</h3>
             <p className={styles.cardText}>
-              See exactly how many trees you helped plant, your total contribution, and the global impact.
+              See exactly how many trees you helped plant and your total ads watched.
             </p>
           </div>
         </div>
@@ -83,8 +83,8 @@ export default function Home() {
           <h2 className={styles.sectionTitle}>Why Plant With Ads is Different</h2>
           <div className={styles.differenceGrid}>
             <div className={styles.differenceCard}>
-              <h4>💰 Real Money</h4>
-              <p>Ads generate actual revenue, not virtual points. Every cent goes to trees.</p>
+              <h4>💰 100% Free</h4>
+              <p>You never pay a cent. The advertisers pay for the trees, you just provide the time.</p>
             </div>
             <div className={styles.differenceCard}>
               <h4>🔍 Full Transparency</h4>

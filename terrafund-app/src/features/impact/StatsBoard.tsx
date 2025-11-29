@@ -4,7 +4,7 @@ import { useGame } from '../../context/GameContext';
 import styles from './StatsBoard.module.css';
 
 export const StatsBoard = () => {
-    const { totalTreesPlanted, currentTreeNumber, totalContribution } = useGame();
+    const { totalTreesPlanted, currentTreeNumber, totalAdsWatched } = useGame();
 
     // Calculate environmental impact based on trees planted
     const co2Offset = totalTreesPlanted * 22; // 22kg CO2 per tree per year
@@ -13,8 +13,8 @@ export const StatsBoard = () => {
     return (
         <div className={styles.container}>
             <div className={styles.statItem}>
-                <span className={styles.label}>Your Contribution</span>
-                <span className={styles.value}>${totalContribution.toFixed(3)}</span>
+                <span className={styles.label}>Ads Watched</span>
+                <span className={styles.value}>{totalAdsWatched}</span>
             </div>
             <div className={styles.statItem}>
                 <span className={styles.label}>Trees Funded</span>

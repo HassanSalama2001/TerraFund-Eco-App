@@ -4,7 +4,7 @@ import { useGame } from '../../context/GameContext';
 import styles from './UserStats.module.css';
 
 export const UserStats = () => {
-    const { totalAdsWatched, totalContribution, treesContributedTo } = useGame();
+    const { totalAdsWatched, treesContributedTo } = useGame();
 
     return (
         <div className={styles.container}>
@@ -18,14 +18,6 @@ export const UserStats = () => {
                         <span className={styles.statLabel}>
                             Tree{treesContributedTo !== 1 ? 's' : ''} helped plant
                         </span>
-                    </div>
-                </div>
-
-                <div className={styles.statItem}>
-                    <span className={styles.statIcon}>💰</span>
-                    <div className={styles.statContent}>
-                        <span className={styles.statValue}>${totalContribution.toFixed(3)}</span>
-                        <span className={styles.statLabel}>Total contribution</span>
                     </div>
                 </div>
 

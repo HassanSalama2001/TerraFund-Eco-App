@@ -24,8 +24,8 @@ export const AdSimulation = () => {
     };
 
     const handleAdComplete = () => {
-        // Reward user (simulated revenue of $0.002 per view)
-        const result = watchAd(0.002);
+        // Reward user (1 Ad Contribution)
+        const result = watchAd();
         setIsModalOpen(false);
 
         // Show celebration if tree was planted
@@ -63,7 +63,7 @@ export const AdSimulation = () => {
                     >
                         📺 Watch Video Ad
                     </Button>
-                    <p className={styles.note}>+ $0.002 to fund</p>
+                    <p className={styles.note}>+ 1 Ad Contribution</p>
                 </div>
 
                 <VideoAdModal

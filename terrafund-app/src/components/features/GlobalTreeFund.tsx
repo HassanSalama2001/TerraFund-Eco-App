@@ -5,10 +5,10 @@ import { useGame } from '../../context/GameContext';
 import styles from './GlobalTreeFund.module.css';
 
 export const GlobalTreeFund = () => {
-    const { currentAmount, targetAmount, currentTreeNumber, totalTreesPlanted } = useGame();
+    const { currentAdsGlobal, adsRequiredPerTree, currentTreeNumber, totalTreesPlanted } = useGame();
 
-    const progress = (currentAmount / targetAmount) * 100;
-    const remaining = targetAmount - currentAmount;
+    const progress = (currentAdsGlobal / adsRequiredPerTree) * 100;
+    const remaining = adsRequiredPerTree - currentAdsGlobal;
     const percentageText = Math.min(Math.round(progress), 100);
 
     return (
@@ -42,12 +42,12 @@ export const GlobalTreeFund = () => {
             <div className={styles.amounts}>
                 <div className={styles.amountItem}>
                     <span className={styles.amountLabel}>Raised</span>
-                    <span className={styles.amountValue}>${currentAmount.toFixed(3)}</span>
+                    <span className={styles.amountValue}>{currentAdsGlobal} Ads</span>
                 </div>
                 <div className={styles.divider}>/</div>
                 <div className={styles.amountItem}>
                     <span className={styles.amountLabel}>Goal</span>
-                    <span className={styles.amountValue}>${targetAmount.toFixed(2)}</span>
+                    <span className={styles.amountValue}>{adsRequiredPerTree} Ads</span>
                 </div>
             </div>
 
@@ -56,7 +56,7 @@ export const GlobalTreeFund = () => {
                     <>
                         <span className={styles.remainingIcon}>🎯</span>
                         <span className={styles.remainingText}>
-                            ${remaining.toFixed(3)} away from planting Tree #{currentTreeNumber}!
+                            {remaining} more ads to plant Tree #{currentTreeNumber}!
                         </span>
                     </>
                 ) : (
