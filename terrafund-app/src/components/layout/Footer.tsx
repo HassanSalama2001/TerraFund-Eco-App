@@ -10,6 +10,7 @@ export const Footer = () => {
                     <Link href="/blog" className={styles.link}>Blog</Link>
                     <Link href="/privacy" className={styles.link}>Privacy</Link>
                     <Link href="/terms" className={styles.link}>Terms</Link>
+                    <Link href="/contact" className={styles.link}>Contact</Link>
                 </div>
             </div>
         </footer>

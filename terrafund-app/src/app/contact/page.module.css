@@ -1,0 +1,150 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-background);
+}
+
+.main {
+    flex: 1;
+    padding: var(--spacing-3xl) var(--spacing-md);
+}
+
+.content {
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.title {
+    font-size: 3rem;
+    color: var(--color-earth-900);
+    text-align: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-3xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: var(--spacing-2xl);
+    align-items: start;
+}
+
+.infoCard {
+    background: var(--color-nature-50);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-nature-200);
+}
+
+.infoCard h3 {
+    color: var(--color-earth-900);
+    margin-bottom: var(--spacing-lg);
+    font-size: 1.5rem;
+}
+
+.infoItem {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.icon {
+    font-size: 1.5rem;
+}
+
+.infoItem strong {
+    display: block;
+    color: var(--color-earth-800);
+    margin-bottom: 4px;
+}
+
+.infoItem a {
+    color: var(--color-nature-700);
+    text-decoration: underline;
+}
+
+.faq {
+    margin-top: var(--spacing-2xl);
+    border-top: 1px solid var(--color-nature-200);
+    padding-top: var(--spacing-lg);
+}
+
+.faq h3 {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.faq details {
+    margin-bottom: var(--spacing-md);
+    cursor: pointer;
+}
+
+.faq summary {
+    font-weight: 600;
+    color: var(--color-earth-700);
+    margin-bottom: var(--spacing-xs);
+}
+
+.faq p {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    padding-left: var(--spacing-md);
+}
+
+.form {
+    background: white;
+    padding: var(--spacing-2xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+}
+
+.formGroup {
+    margin-bottom: var(--spacing-lg);
+}
+
+.formGroup label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-earth-800);
+}
+
+.formGroup input,
+.formGroup textarea {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+    outline: none;
+    border-color: var(--color-nature-500);
+    box-shadow: 0 0 0 3px var(--color-nature-100);
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .title {
+        font-size: 2.5rem;
+    }
+}

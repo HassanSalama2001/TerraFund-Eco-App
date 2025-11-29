@@ -1,22 +1,22 @@
 export interface BlogPost {
-    slug: string;
-    title: string;
-    excerpt: string;
-    content: string;
-    date: string;
-    author: string;
-    image: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  date: string;
+  author: string;
+  image: string;
 }
 
 export const blogPosts: BlogPost[] = [
-    {
-        slug: 'how-ads-plant-trees',
-        title: 'How Watching Ads Can Reforest the Planet',
-        excerpt: 'Discover the innovative model that turns your attention into real-world environmental impact. No donations required.',
-        date: 'November 29, 2025',
-        author: 'Plant With Ads Team',
-        image: '🌳',
-        content: `
+  {
+    slug: 'how-ads-plant-trees',
+    title: 'How Watching Ads Can Reforest the Planet',
+    excerpt: 'Discover the innovative model that turns your attention into real-world environmental impact. No donations required.',
+    date: 'November 29, 2025',
+    author: 'Plant With Ads Team',
+    image: '🌳',
+    content: `
       <h2>The Power of Attention</h2>
       <p>Every day, billions of dollars are spent on digital advertising. Companies pay for your attention. But what if that value could be redirected towards something that actually matters? That's the core mission of Plant With Ads.</p>
       
@@ -29,15 +29,15 @@ export const blogPosts: BlogPost[] = [
       <h2>Transparency is Key</h2>
       <p>We believe you have the right to know where the money goes. That's why we display real-time stats and provide clear breakdowns of our costs versus our donations. We partner with trusted organizations like One Tree Planted to ensure every tree is actually put in the ground.</p>
     `
-    },
-    {
-        slug: 'top-5-benefits-of-reforestation',
-        title: 'Top 5 Benefits of Reforestation Beyond Carbon',
-        excerpt: 'Trees do more than just suck up CO2. They restore water cycles, protect biodiversity, and support local communities.',
-        date: 'November 28, 2025',
-        author: 'Eco Research Team',
-        image: '🌍',
-        content: `
+  },
+  {
+    slug: 'top-5-benefits-of-reforestation',
+    title: 'Top 5 Benefits of Reforestation Beyond Carbon',
+    excerpt: 'Trees do more than just suck up CO2. They restore water cycles, protect biodiversity, and support local communities.',
+    date: 'November 28, 2025',
+    author: 'Eco Research Team',
+    image: '🌍',
+    content: `
       <h2>1. Biodiversity Protection</h2>
       <p>Forests are home to 80% of the world's terrestrial biodiversity. Reforestation helps rebuild habitats for endangered species, from orangutans in Indonesia to jaguars in the Amazon.</p>
       
@@ -53,15 +53,15 @@ export const blogPosts: BlogPost[] = [
       <h2>5. Mental Health</h2>
       <p>Studies show that proximity to nature reduces stress and improves mental well-being. By greening our planet, we are creating a healthier world for future generations to enjoy.</p>
     `
-    },
-    {
-        slug: 'digital-activism-guide',
-        title: 'A Guide to Digital Environmental Activism',
-        excerpt: 'You don\'t need to be a scientist to save the earth. Here are 3 ways you can make a difference from your phone.',
-        date: 'November 27, 2025',
-        author: 'Community Manager',
-        image: '📱',
-        content: `
+  },
+  {
+    slug: 'digital-activism-guide',
+    title: 'A Guide to Digital Environmental Activism',
+    excerpt: 'You don\'t need to be a scientist to save the earth. Here are 3 ways you can make a difference from your phone.',
+    date: 'November 27, 2025',
+    author: 'Community Manager',
+    image: '📱',
+    content: `
       <h2>1. Use Ecosia</h2>
       <p>Switch your search engine to Ecosia. They use their ad revenue to plant trees. It's a simple switch that accumulates massive impact over time.</p>
       
@@ -74,5 +74,29 @@ export const blogPosts: BlogPost[] = [
       <h2>Conclusion</h2>
       <p>The internet consumes a lot of energy, but it can also be a powerful tool for good. By being mindful of your digital habits and using platforms that give back, you turn your screen time into green time.</p>
     `
-    }
+  },
+  {
+    slug: 'transparency-report-how-we-verify',
+    title: 'Transparency Report: How We Verify Every Tree',
+    excerpt: 'Trust is hard to earn and easy to lose. Here is our step-by-step process for ensuring your ad views actually result in planted trees.',
+    date: 'November 26, 2025',
+    author: 'Plant With Ads Team',
+    image: '🔍',
+    content: `
+      <h2>The Chain of Custody</h2>
+      <p>In the world of digital charity, "greenwashing" is a real concern. We built Plant With Ads to be the antidote. Here is exactly how our money moves:</p>
+      
+      <h2>Step 1: Ad Revenue</h2>
+      <p>When you watch an ad, Google pays us. This is tracked in our AdSense dashboard. We publish monthly screenshots of this revenue (redacting sensitive personal info) so you can see the "Input".</p>
+      
+      <h2>Step 2: The Pool</h2>
+      <p>That money sits in a dedicated account. It is not mixed with personal funds. The "Global Tree Fund" bar on your dashboard reflects this balance in real-time.</p>
+      
+      <h2>Step 3: The Donation</h2>
+      <p>Once a month, we take the pooled funds and make a bulk donation to <strong>One Tree Planted</strong>. They are a 501(c)(3) non-profit, meaning their financials are audited.</p>
+      
+      <h2>Step 4: The Receipt</h2>
+      <p>One Tree Planted sends us a donation certificate and a tax receipt. We upload these documents directly to this blog. You can match the "Revenue" from Step 1 with the "Donation" in Step 4. If they match (minus our stated 20% operational cost), you know we are legit.</p>
+    `
+  }
 ];
