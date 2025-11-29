@@ -1,0 +1,33 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-background);
+    text-align: center;
+    padding: var(--spacing-md);
+}
+
+.content {
+    max-width: 500px;
+}
+
+.title {
+    font-size: 8rem;
+    font-weight: 900;
+    color: var(--color-nature-200);
+    line-height: 1;
+    margin-bottom: var(--spacing-md);
+}
+
+.subtitle {
+    font-size: 2rem;
+    color: var(--color-earth-900);
+    margin-bottom: var(--spacing-md);
+}
+
+.text {
+    color: var(--color-text-secondary);
+    font-size: 1.125rem;
+    margin-bottom: var(--spacing-xl);
+}
