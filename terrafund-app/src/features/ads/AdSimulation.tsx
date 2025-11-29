@@ -1,51 +1,87 @@
-                    });
-                }
-            }
-        }, interval);
+"use client";
+
+import { useState } from 'react';
+import { useGame } from '../../context/GameContext';
+import { Button } from '../../components/ui/Button';
+import { VideoAdModal } from '../../components/ui/VideoAdModal';
+import { Achievement } from '../../components/ui/Achievement';
+import { ParticleEffect } from '../../components/ui/ParticleEffect';
+import styles from './AdSimulation.module.css';
+
+export const AdSimulation = () => {
+    const { watchAd } = useGame();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showParticles, setShowParticles] = useState(false);
+    const [achievement, setAchievement] = useState<{ show: boolean; title: string; description: string; icon: string }>({
+        show: false,
+        title: '',
+        description: '',
+        icon: '',
+    });
+
+    const handleWatchClick = () => {
+        setIsModalOpen(true);
     };
 
-return (
-    <>
-        <div className={styles.container}>
-            <div className={styles.adBox}>
-                {isWatching ? (
-                    <div className={styles.watching}>
-                        <p className={styles.text}>Watching Ad...</p>
-                        <div className={styles.progressBar}>
-                            <div
-                                className={styles.progressFill}
-                                style={{ width: `${progress}%` }}
-                            />
-                        </div>
-                    </div>
-                ) : (
-                    <div className={styles.idle}>
-                        <p className={styles.text}>Watch an ad to support the tree fund</p>
-                        <div className={styles.rewardBadge}>+$0.002 to fund</div>
-                    </div>
-                )}
+    const handleAdComplete = () => {
+        // Reward user (simulated revenue of $0.002 per view)
+        const result = watchAd(0.002);
+        setIsModalOpen(false);
+
+        // Show celebration if tree was planted
+        if (result.treePlanted) {
+            setShowParticles(true);
+            setTimeout(() => setShowParticles(false), 2000);
+
+            setAchievement({
+                show: true,
+                title: `Tree #${result.treeNumber} Planted! 🌳`,
+                description: `The community just planted Tree #${result.treeNumber}! You were part of it! A real tree will be planted with this funding.`,
+                icon: '🎉',
+            });
+        }
+    };
+
+    return (
+        <>
+            <div className={styles.container}>
+                <div className={styles.header}>
+                    <h3>Watch & Plant</h3>
+                    <span className={styles.badge}>Live</span>
+                </div>
+
+                <p className={styles.description}>
+                    Watch a short video to contribute to the community tree fund.
+                </p>
+
+                <div className={styles.actionArea}>
+                    <Button
+                        onClick={handleWatchClick}
+                        className={styles.watchButton}
+                        size="lg"
+                        fullWidth
+                    >
+                        📺 Watch Video Ad
+                    </Button>
+                    <p className={styles.note}>+ $0.002 to fund</p>
+                </div>
+
+                <VideoAdModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onComplete={handleAdComplete}
+                />
+
+                {showParticles && <ParticleEffect trigger={showParticles} />}
             </div>
 
-            <Button
-                onClick={handleWatchAd}
-                disabled={isWatching}
-                className={styles.button}
-                variant="secondary"
-            >
-                {isWatching ? 'Watching...' : 'Watch Ad'}
-            </Button>
-
-            {showParticles && <ParticleEffect trigger={showParticles} />}
-        </div>
-
-        {/* Tree planted celebration */}
-        <Achievement
-            show={achievement.show}
-            title={achievement.title}
-            description={achievement.description}
-            icon={achievement.icon}
-            onClose={() => setAchievement(prev => ({ ...prev, show: false }))}
-        />
-    </>
-);
+            <Achievement
+                show={achievement.show}
+                title={achievement.title}
+                description={achievement.description}
+                icon={achievement.icon}
+                onClose={() => setAchievement(prev => ({ ...prev, show: false }))}
+            />
+        </>
+    );
 };
